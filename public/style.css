@@ -1,23 +1,23 @@
 .new-todo {
-	width: 65%;
+    width: 65%;
 }
 
 .todo-box {
-	width: 100%;
+    width: 100%;
 }
 
 .todo-count {
-	margin-top: 5px;
+    margin-top: 5px;
 }
 
 .footer {
-	height: 30px;
+    height: 30px;
 }
 
 .filters li select {
-	margin: 3px;
-	padding: 3px 20px;
-	width: 27%;
+    margin: 3px;
+    padding: 3px 20px;
+    width: 27%;
 }
 
 @-moz-document url-prefix() {
@@ -27,110 +27,110 @@
 }
 
 select.category-select, .filters li select {
-	-webkit-appearance: none;
-	-moz-appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
     appearance:none;
-	color: inherit;
-	font-family: inherit;
-	font-size: 1em;
-	font-weight: 300;
-	padding: 6px;
+    color: inherit;
+    font-family: inherit;
+    font-size: 1em;
+    font-weight: 300;
+    padding: 6px;
     background: rgb(245, 245, 245) url(img/select-arrow.png) no-repeat 90% center;
-	border: 1px solid transparent;
-	border-radius: 4px;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	box-sizing: border-box;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     transition: ease-in 300ms;
     -webkit-transition: ease-in 300ms;
     -moz-transition: ease-in 300ms; 
 }
 
 select.category-select {
-	width: 33%;
+    width: 33%;
 }
 
 select.category-select:hover, .filters li select:hover {
-	border-color: rgba(175, 47, 47, 0.1);
-	box-shadow: none;	
+    border-color: rgba(175, 47, 47, 0.1);
+    box-shadow: none;   
 }
 
 .clear-completed {
-	margin-top: 10px;
-	font-size: 80%;
+    margin-top: 10px;
+    font-size: 80%;
 }
 
 .maroon {
-	background: rgb(128, 0, 0);
-	color: rgb(255, 255, 255);
+    background: rgb(128, 0, 0);
+    color: rgb(255, 255, 255);
 }
 
 .green {
-	background: rgb(41, 163, 41);
-	color: rgb(255, 255, 255);
+    background: rgb(41, 163, 41);
+    color: rgb(255, 255, 255);
 }
 
 .gold {
-	background: rgb(153, 153, 102);
-	color: rgb(255, 255, 255);
+    background: rgb(153, 153, 102);
+    color: rgb(255, 255, 255);
 }
 
 .blue {
-	background: rgb(102, 140, 255);
-	color: rgb(255, 255, 255);
+    background: rgb(102, 140, 255);
+    color: rgb(255, 255, 255);
 }
 
 .black {
-	background: rgb(0, 0, 0);
-	color: rgb(255, 255, 255);
+    background: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
 }
 
 .indigo {
-	background: rgb(51, 0, 51);
-	color: rgb(255, 255, 255);
+    background: rgb(51, 0, 51);
+    color: rgb(255, 255, 255);
 }
 
 .none {
-	color: inherit;
-	background: inherit;
+    color: inherit;
+    background: inherit;
 }
 
 @media (max-width: 530px) {
-	.todoapp input::-webkit-input-placeholder {
-		font-size: 0.7em;
-	}
+    .todoapp input::-webkit-input-placeholder {
+        font-size: 0.7em;
+    }
 
-	.todoapp input::-moz-placeholder {
-		font-size: 0.7em;
-	}
+    .todoapp input::-moz-placeholder {
+        font-size: 0.7em;
+    }
 
-	.todoapp input::input-placeholder {
-		font-size: 0.7em;
-	}
-	.todo-count {
-		margin-top: auto;
-	}
-	.footer {
-		height: 138px;
-	}
+    .todoapp input::input-placeholder {
+        font-size: 0.7em;
+    }
+    .todo-count {
+        margin-top: auto;
+    }
+    .footer {
+        height: 138px;
+    }
 
-	.filters {
-		bottom: 10px;
-	}
+    .filters {
+        bottom: 10px;
+    }
 
-	.filters li a {
-		display: block;
-		padding-top: 7px;
-	}
+    .filters li a {
+        display: block;
+        padding-top: 7px;
+    }
 
-	.filters li select {
-		width: 34%;
-	}
+    .filters li select {
+        width: 34%;
+    }
 
-	.clear-completed {
-		margin-top: auto; 
-		line-height: 24px;
-	}
+    .clear-completed {
+        margin-top: auto; 
+        line-height: 24px;
+    }
 }
