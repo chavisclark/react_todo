@@ -3,6 +3,7 @@
 
 // init project
 var express = require('express');
+var favicon = require('serve-favicon');
 var app = express();
 
 // we've started you off with Express, 
@@ -10,6 +11,7 @@ var app = express();
 
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
+app.use(favicon(__dirname + '/public/favicon.ico'))
 
 app.use('/node_modules', express.static('node_modules'));
 

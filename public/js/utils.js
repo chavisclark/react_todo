@@ -4,6 +4,7 @@ var app = app || {};
 	'use strict';
 
 	app.Utils = {
+		// Creates a random id for each todo
 		uuid: function () {
 			/*jshint bitwise:false */
 			var i, random;
@@ -21,10 +22,12 @@ var app = app || {};
 			return uuid;
 		},
 
+		// Add an 's' to the end of a word if the count !== 1
 		pluralize: function (count, word) {
 			return count === 1 ? word : word + 's';
 		},
 
+		// Here Localstorage magically saves the information to your computer
 		store: function (namespace, data) {
 			if (data) {
 				return localStorage.setItem(namespace, JSON.stringify(data));
@@ -34,6 +37,7 @@ var app = app || {};
 			return (store && JSON.parse(store)) || [];
 		},
 
+		// New object functionality used in the model
 		extend: function () {
 			var newObj = {};
 			for (var i = 0; i < arguments.length; i++) {

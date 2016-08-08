@@ -12,21 +12,25 @@ var app = app || {};
 	var ENTER_KEY = 13;
 
 	app.TodoItem = React.createClass({
+
+		// Executes the submit function passed from the parent
 		handleSubmit: function (event) {
 			var val = this.state.editText.trim();
 			if (val) {
 				this.props.onSave(val);
-				this.setState({editText: val});
+				this.setState({editText: val.title}); // Returning the title property
 			} else {
 				this.props.onDestroy();
 			}
 		},
 
+		// Executes the edit function passed from the parent
 		handleEdit: function () {
 			this.props.onEdit();
 			this.setState({editText: this.props.todo.title});
 		},
-
+		
+		// Handles the keydown event and executes the handleSubmit function
 		handleKeyDown: function (event) {
 			if (event.which === ESCAPE_KEY) {
 				this.setState({editText: this.props.todo.title});
@@ -36,12 +40,14 @@ var app = app || {};
 			}
 		},
 
+		// Function sets editText state when editing is not null
 		handleChange: function (event) {
 			if (this.props.editing) {
 				this.setState({editText: event.target.value});
 			}
 		},
 
+		// Sets inital state
 		getInitialState: function () {
 			return {editText: this.props.todo.title};
 		},
@@ -75,23 +81,29 @@ var app = app || {};
 			}
 		},
 
+		// Here I added the todo category.color to the classname 
+		// in order to change the color of the todo item respectively
 		render: function () {
+			var { todo, editing, 
+			  onToggle, onDestroy 
+			} = this.props
+
 			return (
 				<li className={classNames({
-					completed: this.props.todo.completed,
-					editing: this.props.editing
+					completed: todo.completed,
+					editing: editing
 				})}>
-					<div className="view">
+					<div className={classNames("view", todo.category.color)}>
 						<input
 							className="toggle"
 							type="checkbox"
-							checked={this.props.todo.completed}
-							onChange={this.props.onToggle}
+							checked={todo.completed}
+							onChange={onToggle}
 						/>
 						<label onDoubleClick={this.handleEdit}>
-							{this.props.todo.title}
+							{todo.title}
 						</label>
-						<button className="destroy" onClick={this.props.onDestroy} />
+						<button className="destroy" onClick={onDestroy} />
 					</div>
 					<input
 						ref="editField"
