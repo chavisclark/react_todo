@@ -8,6 +8,7 @@ var app = app || {};
                                                
 (function () {
     'use strict';
+    
     // Setting global variables for app
     app.ALL_TODOS = 'all';
     app.ACTIVE_TODOS = 'active';
@@ -59,6 +60,7 @@ var app = app || {};
         handleChange: function (event) {
             this.setState({newTodo: {title: event.target.value}});
         },
+
         // Function that handles the submit for the todo input
         handleNewTodoKeyDown: function (event) {
             if (event.keyCode !== ENTER_KEY) {

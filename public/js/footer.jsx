@@ -8,6 +8,7 @@ var app = app || {};
 (function () {
     'use strict';
     app.TodoFooter = React.createClass({
+        
         render: function () {
             // Setting variables from this.props
             var { count, nowShowing, completedCount, 
@@ -25,7 +26,7 @@ var app = app || {};
                 )
             }, this);
 
-            // Handles the loic for displaying the clear completed link
+            // Handles the logic for displaying the clear completed link
             if (completedCount > 0) {
                 clearButton = (
                     <button

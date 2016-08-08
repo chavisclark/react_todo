@@ -4,6 +4,7 @@ var app = app || {};
     'use strict';
 
     app.Utils = {
+        
         // Creates a random id for each todo
         uuid: function () {
             /*jshint bitwise:false */
