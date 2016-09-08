@@ -5,11 +5,11 @@
 /*global React, Router*/
 
 var app = app || {};
-                                               
+
 (function () {
     'use strict';
     
-    // Setting global variables for app
+    // Setting global properties for app
     app.ALL_TODOS = 'all';
     app.ACTIVE_TODOS = 'active';
     app.COMPLETED_TODOS = 'completed';
@@ -21,17 +21,14 @@ var app = app || {};
       {id: 'tw', name: 'Tyrell Wellick', color: 'gold'},
       {id: 'mr', name: 'Mr. Robot', color: 'maroon'}, 
       {id: 'ea', name: 'Elliot Alderson', color: 'blue'},
-      {id: 'tda', name: 'The Dark Army', color: 'indigo'}
+      {id: 'tda', name: 'The Dark Army', color: 'indigo'},
+      app.NO_CATEGORY, app.ALL_CATEGORIES
     ];
-    app.GLOBAL_CATEGORIES = [];
-    for (var i = 0; i < app.CATEGORIES.length; i++) {
-      app.GLOBAL_CATEGORIES.push(app.CATEGORIES[i]);
-    }
-    app.GLOBAL_CATEGORIES.unshift(app.ALL_CATEGORIES);
-    app.GLOBAL_CATEGORIES.push(app.NO_CATEGORY)
     
     var TodoFooter = app.TodoFooter,
         TodoItem = app.TodoItem,
+        toggleMe,
+        freezeText = 'Freeze category',
         ENTER_KEY = 13;
 
     var TodoApp = React.createClass({
@@ -41,11 +38,12 @@ var app = app || {};
                 currentCategory: app.ALL_CATEGORIES,
                 editing: null,
                 newTodo: '',
-                newTodoCategory: app.NO_CATEGORY
+                newTodoCategory: app.NO_CATEGORY,
+                toggleFreeze: null
             };
         },
 
-        // Configuring the router for displaying inital filters for todos
+        // Configuring the router for displaying filters for todos
         componentDidMount: function () {
             var setState = this.setState;
             var router = Router({
@@ -73,13 +71,14 @@ var app = app || {};
             // Checking to make sure the input field is not empty
             if (!this.state.newTodo.title) {
                 alert("Oops! You forgot to write something in there.")
+                return;
             }
 
             // Creating new variables for the current state
             var newTitle = this.state.newTodo.title.trim(),
                 newCategory = this.state.newTodoCategory ? this.state.newTodoCategory : app.NO_CATEGORY,
                 newTodo = this.state.newTodo;
-            
+
             // Adding new properties to the newTodo object
             newTodo.title = newTitle;
             newTodo.category = newCategory;
@@ -87,11 +86,14 @@ var app = app || {};
             if (newTodo) {
                 // Updating the model and setting the next state to the current 
                 this.props.model.addTodo(newTodo);
+                console.log(newCategory)
                 this.setState({
                   newTodo: '',
                   currentCategory: newCategory,
-                  newTodoCategory: newCategory
+                  newTodoCategory: this.state.toggleFreeze !== true ? app.NO_CATEGORY : newCategory
                 });
+
+                this.state.toggleFreeze !== true ? this.resetSelect() : '';
             }
         },
 
@@ -128,28 +130,46 @@ var app = app || {};
 
         // Function handles the category selection for the newTodo
         handleCategorySelect: function (event) {
+          var newCategoryFilter = [];
           // Filter the categories to find the matching id and return the first object
-          var newCategoryFilter = app.CATEGORIES.filter(function (category) {
+          newCategoryFilter = app.CATEGORIES.filter(function (category) {
             return category.id === event.target.value;
-          });
-        
-          this.setState({newTodoCategory: newCategoryFilter[0]});
+          });            
+
+          this.setState({newTodoCategory: newCategoryFilter[0],
+                         currentCategory: newCategoryFilter[0]
+                        });
         },
 
-        handleCategoryView: function (event) {
-          // Filter the global categories which include 'All Categories' and 'None'
-          var newCategoryFilter = app.GLOBAL_CATEGORIES.filter(function (category) {
-            return category.id === event.target.value;
-          });
-      
-          this.setState({currentCategory: newCategoryFilter[0]});
+        toggleFreeze: function () {
+            if (toggleMe) {
+                if (toggleMe.getAttribute('class') === 'off'){
+                    toggleMe.setAttribute('class', 'on');
+                    this.setState({toggleFreeze: true})
+                    freezeText = 'Reset category';
+                    return 'on'
+                } else {
+                    toggleMe.setAttribute('class', 'off');
+                    this.setState({toggleFreeze: false, newTodoCategory: app.NO_CATEGORY});
+                    this.resetSelect();
+                    freezeText = 'Freeze category';
+                    return 'off'
+                }                
+            }
         },
-        
+
+        resetSelect: function () {
+            var sel = React.findDOMNode(this.refs.sel);
+            sel.value = 'none';
+        },
+
         render: function () {
             var footer, 
-                main, 
+                main,
+                option, 
                 todos = this.props.model.todos, 
                 selectedCategory = this.state.currentCategory;
+                toggleMe = document.getElementById('toggleMe')
 
             // Filters todos from model and switches the url based on specific conditons
             // Status x Category 
@@ -191,13 +211,15 @@ var app = app || {};
                         editing={this.state.editing === todo.id}
                         onSave={this.save.bind(this, todo)}
                         onCancel={this.cancel}
-                        handleChangeCategory={this.handleChangeCategory}
                     />
                 );
             }, this);
 
             // Creating category list to display options for select menu
-            var categoryList = app.CATEGORIES.map(function(categoryOption) { 
+            var categories_ = app.CATEGORIES.filter(function(c) {
+                return c.id !== 'all'
+            })
+            var categoryList = categories_.map(function(categoryOption) { 
                 return (
                     <option key={categoryOption.id} name={categoryOption.name} value={categoryOption.id}>{categoryOption.name}</option>
                 )
@@ -209,7 +231,11 @@ var app = app || {};
             }, 0);
 
             var completedCount = todos.length - activeTodoCount;
-
+            if (this.state.currentCategory.id === 'all') {
+                option = <option name="None" value="none">Select category...</option>
+            } else {
+                option = <option name={this.state.currentCategory.name} value={this.state.currentCategory.id}>**{this.state.currentCategory.name}</option>
+            }
             if (activeTodoCount || completedCount) {
                 footer =
                     <TodoFooter
@@ -218,7 +244,7 @@ var app = app || {};
                         nowShowing={this.state.nowShowing}
                         currentCategory={this.state.currentCategory}
                         onClearCompleted={this.clearCompleted}
-                        handleCategoryView={this.handleCategoryView}
+                        handleCategoryView={this.handleCategorySelect}
                     />;
             }
 
@@ -247,16 +273,22 @@ var app = app || {};
                             <span className={classNames('todo-box')}>
                                 <input
                                     className={classNames('new-todo')}
-                                    placeholder="What needs to be done?"
+                                    placholder="What needs to be done?"
                                     value={this.state.newTodo.title}
                                     onKeyDown={this.handleNewTodoKeyDown}
                                     onChange={this.handleChange}
                                     autoFocus={true}
                                 />
-                                <select className={"category-select"} onChange={this.handleCategorySelect}>
-                                  <option name="None" value="none">Select category...</option>
+                                <select ref="sel" className={"category-select"} onChange={this.handleCategorySelect}>
+                                  {option}
                                   {categoryList}
                                 </select>
+                                <div className='toggleBox'>
+                                    <div className='tooltip'>
+                                      <input id='toggleMe' className='off' onClick={this.toggleFreeze} type="button" />
+                                      <span className='tooltiptext tooltip-right'>{freezeText}</span>
+                                    </div>
+                                </div>
                             </span>
                     </header>
                     {main}

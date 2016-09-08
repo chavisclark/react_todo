@@ -12,7 +12,8 @@ var app = app || {};
         render: function () {
             // Setting variables from this.props
             var { count, nowShowing, completedCount, 
-                onClearCompleted, handleCategoryView
+                onClearCompleted, handleCategoryView, 
+                currentCategory, option
             } = this.props;
             
             // Makes the item count seem a little for human :)
@@ -20,12 +21,16 @@ var app = app || {};
                 clearButton = null;
             
             // Creating category list from global categories
-            var categoryList = app.GLOBAL_CATEGORIES.map(function(categoryOption) { 
+            var categoryList = app.CATEGORIES.map(function(categoryOption) { 
                 return (
                     <option key={categoryOption.id} name={categoryOption.name} value={categoryOption.id}>{categoryOption.name}</option>
                 )
             }, this);
-
+            if (currentCategory.id === 'all') {
+                option = <option name="All" value="all">Filter categories</option>
+            } else {
+                option = <option name={currentCategory.name} value={currentCategory.id}>**{currentCategory.name}</option>
+            }
             // Handles the logic for displaying the clear completed link
             if (completedCount > 0) {
                 clearButton = (
@@ -46,7 +51,7 @@ var app = app || {};
                     <ul className="filters">
                         <li>
                             <select onChange={handleCategoryView}>
-                              <option value="">Filter Categories...</option> 
+                              {option}
                               {categoryList}
                             </select>
                         </li>
